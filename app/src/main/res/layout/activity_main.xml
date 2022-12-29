@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.prateek.smsdemo.viewmodel.ContactsViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/parent_linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="20dp"
+            android:text="Full Name"
+            app:hintAnimationEnabled="true"
+            app:errorEnabled="true"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:id="@+id/et_full_name"
+                android:text="@={viewModel.nameLiveData}"
+                android:inputType="textPersonName"
+                android:layout_height="wrap_content"
+                android:hint="Full Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="20dp"
+            android:text="Full Name"
+            app:hintAnimationEnabled="true"
+            app:errorEnabled="true"
+            app:counterMaxLength="@integer/material_motion_duration_long_1"
+            android:maxLength="200"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_address"
+                android:layout_width="match_parent"
+                android:text="@={viewModel.addressLiveData}"
+                android:inputType="textImeMultiLine"
+                android:layout_height="wrap_content"
+                android:hint="Address" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="20dp"
+            android:text="Full Name"
+            app:hintAnimationEnabled="true"
+            app:errorEnabled="true"
+            app:prefixText="+91"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_mobile_number"
+                android:layout_width="match_parent"
+                android:text="@={viewModel.mobileNoLiveData}"
+                android:inputType="number"
+                android:layout_height="wrap_content"
+                android:hint="Mobile Number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="20dp"
+            android:text="Full Name"
+            app:hintAnimationEnabled="true"
+            app:errorEnabled="true"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:text="@={viewModel.emailLiveData}"
+                android:layout_height="wrap_content"
+                android:hint="Email Address" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="@{()-> viewModel.verifyAndAdd()}"
+            android:layout_gravity="center"
+            android:text="Submit"/>
+
+    </LinearLayout>
+</layout>
