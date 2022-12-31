@@ -8,6 +8,8 @@
         <variable
             name="viewModel"
             type="com.prateek.smsdemo.viewmodel.ContactsViewModel" />
+
+
     </data>
 
     <LinearLayout

@@ -1,7 +1,9 @@
 package com.prateek.smsdemo.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -10,14 +12,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.prateek.smsdemo.R
 import com.prateek.smsdemo.data.ContactDatabase
 import com.prateek.smsdemo.databinding.ActivityMainBinding
+import com.prateek.smsdemo.models.Contact
 import com.prateek.smsdemo.models.SaveStatusTypes
 import com.prateek.smsdemo.repository.ContactsRepository
 import com.prateek.smsdemo.viewmodel.ContactsViewModel
 import com.prateek.smsdemo.viewmodel.ContactsViewModelFactory
 
 
-
-class MainActivity : AppCompatActivity() {
+class AddContactActivity : ParentActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -25,15 +27,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        var isEditing = false
+
         binding.lifecycleOwner = this
 
-//        val db = Room.databaseBuilder(applicationContext, ContactDatabase::class.java, "contacts_db").build()
+
         val dao = ContactDatabase.getDatabase(applicationContext).dao()
-//        val dao = db.dao()
         val repository = ContactsRepository(dao)
         val viewModel = ViewModelProvider(this, ContactsViewModelFactory(repository))[ContactsViewModel::class.java]
 
         binding.viewModel = viewModel
+
 
         viewModel.emailLiveData.observe(this) {
             if (!Patterns.EMAIL_ADDRESS.matcher(it).matches())
@@ -41,16 +45,32 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.mobileNoLiveData.observe(this) {
-            if (it.length != 10 || it.length != 13)
-                binding.etMobileNumber.error = "Enter 10 or 13 Digits Mobile Number"
+            if(it.length != 10)
+                binding.etMobileNumber.error = "Please Enter 10 Digit Mobile Number"
         }
 
         viewModel.savedStatus.observe(this) {
-            if (it == SaveStatusTypes.SAVED)
-                Snackbar.make(binding.parentLinear, "Saved Successfully", 6000).show()
-            else
-                Snackbar.make(binding.parentLinear, "Please Check Contents Again", 6000).show()
+            when (it) {
+                SaveStatusTypes.SAVED -> {
+                    startActivity(Intent(this@AddContactActivity, ListContactsActivity::class.java)
+                        .putExtra("last_saved", true))
+                    finish()
+                }
 
+                SaveStatusTypes.RECHECK -> Snackbar.make(
+                    binding.parentLinear,
+                    "Please Check Contents Again",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+                SaveStatusTypes.UPDATED -> Snackbar.make(
+                    binding.parentLinear,
+                    "Successfully Updated",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+                null -> {}
+            }
         }
     }
 }

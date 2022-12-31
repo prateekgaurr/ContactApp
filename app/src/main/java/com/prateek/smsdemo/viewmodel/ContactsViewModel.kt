@@ -1,15 +1,14 @@
 package com.prateek.smsdemo.viewmodel
 
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.Display
 import android.widget.MultiAutoCompleteTextView
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.material.snackbar.Snackbar
+import com.prateek.smsdemo.interfaces.OnContactSaveListener
 import com.prateek.smsdemo.models.Contact
 import com.prateek.smsdemo.models.SaveStatusTypes
 import com.prateek.smsdemo.repository.ContactsRepository
@@ -20,7 +19,8 @@ import java.util.*
 
 class ContactsViewModel(private val repository: ContactsRepository) : ViewModel() {
 
-   val contactsLiveData : LiveData<List<Contact>> = repository.getAllContacts()
+    val contactsLiveData : LiveData<List<Contact>>
+        get() = repository.getAllContacts()
 
     val nameLiveData : MutableLiveData<String> = MutableLiveData()
     val addressLiveData : MutableLiveData<String> = MutableLiveData()
@@ -32,18 +32,23 @@ class ContactsViewModel(private val repository: ContactsRepository) : ViewModel(
         if(
             TextUtils.isEmpty(nameLiveData.value) ||
             TextUtils.isEmpty(addressLiveData.value) ||
-            !(Patterns.EMAIL_ADDRESS.matcher(emailLiveData.value).matches()) ||
-                TextUtils.isEmpty(mobileNoLiveData.value)){
+            !(Patterns.EMAIL_ADDRESS.matcher(emailLiveData.value.toString()).matches()) ||
+            (mobileNoLiveData.value?.length != 10)
+        ){
             savedStatus.value = SaveStatusTypes.RECHECK
         }
         else{
-            insertContact(Contact(0, nameLiveData.value!!, addressLiveData.value!!, Date(), mobileNoLiveData.value!! ))
-            savedStatus.value = SaveStatusTypes.SAVED
+            saveOrUpdateContact()
         }
     }
 
+    private fun saveOrUpdateContact() {
+            insertContact(Contact(0, nameLiveData.value!!, addressLiveData.value!!, Date(), mobileNoLiveData.value!! , emailLiveData.value!!))
+            savedStatus.value = SaveStatusTypes.SAVED
+    }
 
-    private fun insertContact(contact: Contact){
+
+    fun insertContact(contact: Contact){
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertContact(contact)
         }
@@ -60,7 +65,5 @@ class ContactsViewModel(private val repository: ContactsRepository) : ViewModel(
             repository.deleteContact(contact)
         }
     }
-
-
 
 }
