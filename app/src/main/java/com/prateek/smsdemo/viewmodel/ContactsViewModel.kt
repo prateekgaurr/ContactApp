@@ -12,12 +12,15 @@ import com.prateek.smsdemo.interfaces.OnContactSaveListener
 import com.prateek.smsdemo.models.Contact
 import com.prateek.smsdemo.models.SaveStatusTypes
 import com.prateek.smsdemo.repository.ContactsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
+import javax.inject.Inject
 
-class ContactsViewModel(private val repository: ContactsRepository) : ViewModel() {
+@HiltViewModel
+class ContactsViewModel @Inject constructor(private val repository: ContactsRepository) : ViewModel() {
 
     val contactsLiveData : LiveData<List<Contact>>
         get() = repository.getAllContacts()

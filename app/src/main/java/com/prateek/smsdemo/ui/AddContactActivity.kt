@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -16,9 +17,9 @@ import com.prateek.smsdemo.models.Contact
 import com.prateek.smsdemo.models.SaveStatusTypes
 import com.prateek.smsdemo.repository.ContactsRepository
 import com.prateek.smsdemo.viewmodel.ContactsViewModel
-import com.prateek.smsdemo.viewmodel.ContactsViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AddContactActivity : ParentActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -27,14 +28,14 @@ class AddContactActivity : ParentActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        var isEditing = false
-
         binding.lifecycleOwner = this
 
 
-        val dao = ContactDatabase.getDatabase(applicationContext).dao()
-        val repository = ContactsRepository(dao)
-        val viewModel = ViewModelProvider(this, ContactsViewModelFactory(repository))[ContactsViewModel::class.java]
+//        val dao = ContactDatabase.getDatabase(applicationContext).dao()
+//        val repository = ContactsRepository(dao)
+//        val viewModel = ViewModelProvider(this, ContactsViewModelFactory(repository))[ContactsViewModel::class.java]
+
+        val viewModel : ContactsViewModel by viewModels<ContactsViewModel>()
 
         binding.viewModel = viewModel
 

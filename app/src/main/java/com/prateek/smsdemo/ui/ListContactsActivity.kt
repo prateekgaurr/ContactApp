@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,22 +16,19 @@ import com.prateek.smsdemo.interfaces.OnItemClickListener
 import com.prateek.smsdemo.models.Contact
 import com.prateek.smsdemo.repository.ContactsRepository
 import com.prateek.smsdemo.viewmodel.ContactsViewModel
-import com.prateek.smsdemo.viewmodel.ContactsViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 
+@AndroidEntryPoint
 class ListContactsActivity : ParentActivity(), OnItemClickListener {
 
     private lateinit var binding : ActivityListContactsBinding
-    private lateinit var viewModel: ContactsViewModel
     private lateinit var adapter : ContactsAdapter
+    val viewModel : ContactsViewModel by viewModels<ContactsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_list_contacts)
-
-        val dao = ContactDatabase.getDatabase(applicationContext).dao()
-        val repository = ContactsRepository(dao)
-        viewModel = ViewModelProvider(this, ContactsViewModelFactory(repository))[ContactsViewModel::class.java]
 
         binding.viewModel  = viewModel
         binding.lifecycleOwner = this
