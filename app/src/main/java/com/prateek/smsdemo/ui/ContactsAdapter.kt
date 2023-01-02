@@ -12,7 +12,6 @@ import com.prateek.smsdemo.models.Contact
 class ContactsAdapter constructor(
     val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
 
-
     inner class ViewHolder(private val binding: SingleContactBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(contact: Contact){
             binding.contact = contact

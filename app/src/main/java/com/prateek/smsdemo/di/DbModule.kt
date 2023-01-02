@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 @Module
@@ -17,17 +18,15 @@ import javax.inject.Inject
 class DbModule {
 
     @Provides
-    fun getDatabase(@ApplicationContext context: Context): ContactDatabase {
-        return Room.databaseBuilder(
+    @Singleton
+    fun getDatabase(@ApplicationContext context: Context): ContactDatabase = Room.databaseBuilder(
             context,
             ContactDatabase::class.java,
             "contacts_db"
         ).build()
-    }
 
     @Provides
-    fun getContactsDao(database: ContactDatabase) : ContactsDao{
-        return database.dao()
-    }
+    @Singleton
+    fun getContactsDao(database: ContactDatabase) : ContactsDao = database.dao()
 
 }

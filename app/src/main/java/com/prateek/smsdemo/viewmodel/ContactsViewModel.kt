@@ -23,7 +23,8 @@ import javax.inject.Inject
 class ContactsViewModel @Inject constructor(private val repository: ContactsRepository) : ViewModel() {
 
     val contactsLiveData : LiveData<List<Contact>>
-        get() = repository.getAllContacts()
+        get() = repository.getAllContacts().asLiveData()
+
 
     val nameLiveData : MutableLiveData<String> = MutableLiveData()
     val addressLiveData : MutableLiveData<String> = MutableLiveData()

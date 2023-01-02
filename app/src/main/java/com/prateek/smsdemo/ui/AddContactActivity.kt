@@ -30,11 +30,6 @@ class AddContactActivity : ParentActivity() {
 
         binding.lifecycleOwner = this
 
-
-//        val dao = ContactDatabase.getDatabase(applicationContext).dao()
-//        val repository = ContactsRepository(dao)
-//        val viewModel = ViewModelProvider(this, ContactsViewModelFactory(repository))[ContactsViewModel::class.java]
-
         val viewModel : ContactsViewModel by viewModels<ContactsViewModel>()
 
         binding.viewModel = viewModel
